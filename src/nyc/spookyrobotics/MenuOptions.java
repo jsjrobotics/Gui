@@ -1,26 +1,22 @@
-package nyc.c4q;
+package nyc.spookyrobotics;
 
 import java.io.IOException;
 
 public enum MenuOptions {
     SHUTDOWN("Shutdown", () -> {
-        Runtime runtime = Runtime.getRuntime();
-        try {
-            runtime.exec("sudo shutdown now");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        exec("sudo shutdown now");
         System.exit(0);
     }),
+    KILL_X("Kill X", () -> {
+        exec("sudo pkill x");
+    }),
+
     REBOOT("Reboot", () -> {
-        Runtime runtime = Runtime.getRuntime();
-        try {
-            runtime.exec("sudo shutdown -r now");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        exec("sudo shutdown -r now");
         System.exit(0);
     });
+
+
     private final String mLabel;
     private final Runnable mOnSelected;
 
@@ -35,5 +31,14 @@ public enum MenuOptions {
 
     public Runnable onSelected() {
         return mOnSelected;
+    }
+
+    private static void exec(String command){
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            runtime.exec(command);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

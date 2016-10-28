@@ -1,4 +1,4 @@
-package nyc.c4q;
+package nyc.spookyrobotics;
 
 import javax.swing.*;
 
