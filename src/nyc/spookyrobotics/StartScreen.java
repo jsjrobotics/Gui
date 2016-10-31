@@ -18,10 +18,7 @@ public class StartScreen {
      */
     private static void createAndShowGUI() {
 
-        JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frame.setPreferredSize(new Dimension(480, 320));
+        JFrame frame = buildFrame();
         frame.setLayout(new BorderLayout());
 
         JPanel topPanel = buildTopPanel();
@@ -35,10 +32,18 @@ public class StartScreen {
         frame.setVisible(true);
     }
 
+    private static JFrame buildFrame() {
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setPreferredSize(new Dimension(480, 320));
+        return frame;
+    }
+
     private static JPanel buildBottomPanel() {
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        bottomPanel.add(new JButton("Launch Website"));
+        bottomPanel.add(new JButton("Launch Website2"));
         bottomPanel.add(new JButton("Check Temperature"));
         return bottomPanel;
     }
@@ -99,17 +104,6 @@ public class StartScreen {
     }
 
 
-    private static String runAndGetOutput(String command) throws IOException, InterruptedException {
-        Process p = Runtime.getRuntime().exec(command);
-        int result = p.waitFor();
-        BufferedReader output = new BufferedReader( new InputStreamReader(p.getInputStream()));
-        StringBuilder terminalOut = new StringBuilder();
-        String in;
-        while ( (in = output.readLine()) != null){
-            terminalOut.append(in);
-        }
-        return terminalOut.toString();
-    }
     private static Component buildButton(MenuOptions option) {
         JButton button = new JButton(option.label());
         button.addActionListener(e -> option.onSelected().run());
