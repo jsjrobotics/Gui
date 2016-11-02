@@ -1,12 +1,20 @@
-REMOTE_FILE=/home/pi/Gui.jar
-TEMP_FILE=/home/pi/temp.jar
+REMOTE_INSTALLATION_FOLDER=/home/pi
+REMOTE_TARGET=$REMOTE_INSTALLATION_FOLDER/Gui.jar
+REMOTE_TEMP_FILE=$REMOTE_INSTALLATION_FOLDER/temp.jar
+REMOTE_LAUNCH_SCRIPT=/home/pi/SpookyBot.sh
 
-if [ -z $PI_ADDRESS ]; then 
+COPY_FILE_TO_REMOTE_COMMAND="scp -o StrictHostKeyChecking=no ./out/artifacts/Gui_jar/Gui.jar pi@$PI_ADDRESS:$REMOTE_TEMP_FILE"
+REMOTE_COMMANDS_TO_EXECUTE="mv $REMOTE_TEMP_FILE $REMOTE_TARGET; wait; $REMOTE_LAUNCH_SCRIPT"
+REMOTE_COMMANDS_TO_EXECUTE2="mv $REMOTE_TEMP_FILE $REMOTE_TARGET; wait; sudo startx&  export DISPLAY=:0.0 && sudo java -jar /home/pi/Gui.jar"
+
+SSH_LOGIN_COMMAND="ssh -T pi@$PI_ADDRESS"
+
+if [ -z $PI_ADDRESS ]; then
   echo "PI_ADDRESS is unset";
   exit;
-else 
-  echo "Uploading Gui.jar to $OUTPUT_FILE"
+else
+  echo "Uploading Gui.jar to $REMOTE_TARGET"
 fi
 
-scp -o CheckHostIP=no ./out/artifacts/Gui_jar/Gui.jar pi@$PI_ADDRESS:$TEMP_FILE
-echo "mv $TEMP_FILE $REMOTE_FILE && sudo reboot" | ssh -T pi@$PI_ADDRESS
+$COPY_FILE_TO_REMOTE_COMMAND
+$SSH_LOGIN_COMMAND $REMOTE_COMMANDS_TO_EXECUTE
