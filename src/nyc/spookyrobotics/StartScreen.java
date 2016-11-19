@@ -1,5 +1,7 @@
 package nyc.spookyrobotics;
 
+import com.pi4j.io.i2c.I2CFactory;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedReader;
@@ -53,7 +55,23 @@ public class StartScreen {
         middlepanel.setLayout(new BoxLayout(middlepanel, BoxLayout.Y_AXIS));
         middlepanel.add(new JLabel("Welcome to the SpookyBot"));
         middlepanel.add(buildShowIpButton(middlepanel));
+        middlepanel.add(buildRunI2cTest(middlepanel));
+
         return middlepanel;
+    }
+
+    private static Component buildRunI2cTest(JPanel middlepanel) {
+        JButton button = new JButton("Run I2C Test");
+        button.addActionListener(ignored -> {
+            try {
+                new I2CExample().run(middlepanel);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (I2CFactory.UnsupportedBusNumberException e) {
+                e.printStackTrace();
+            }
+        });
+        return button;
     }
 
     private static JPanel buildTopPanel() {
